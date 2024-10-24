@@ -57,7 +57,7 @@ app.post("/content/trigger", async (c) => {
   const body = await c.req.json();
   // const { id, status } = body;
   // filter for status first
-  console.log(typeof body);
+  console.log(body.trim());
   // if (status == 3) {
   //   let value = await getValue(id);
   //   console.log(value);
