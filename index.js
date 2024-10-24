@@ -56,9 +56,9 @@ app.post("/content/entry", async (c) => {
 app.post("/content/trigger", async (c) => {
   const body = await c.req.json();
   // const { id, status } = body;
-  let data = body.trim();
+  let data = JSON.stringify(body);
   // filter for status first
-  let parsedValues = JSON.parse(JSON.stringify(data));
+  let parsedValues = JSON.parse(data);
   console.log({ parsedValues });
 
   // if (status == 3) {
