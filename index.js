@@ -57,15 +57,15 @@ app.post("/content/trigger", async (c) => {
   const body = await c.req.json();
   const { id, status } = body;
   // filter for status first
-  // console.log(JSON.parse(body));
-  if (status == 3) {
-    let value = await getValue(id);
-    console.log(value);
-    let parsedValues = JSON.stringify(value).data;
-    let res = await postToDirectus(parsedValues);
-    return c.json(res);
-    // Post to directus
-  }
+  console.log(id, status);
+  // if (status == 3) {
+  //   let value = await getValue(id);
+  //   console.log(value);
+  //   let parsedValues = JSON.stringify(value).data;
+  //   let res = await postToDirectus(parsedValues);
+  //   return c.json(res);
+  //   // Post to directus
+  // }
   return c.json({ id, status });
 });
 serve({
