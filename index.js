@@ -57,8 +57,11 @@ app.post("/content/trigger", async (c) => {
   const body = await c.req.json();
   // const { id, status } = body;
   let data = JSON.stringify(body);
+  var jsonStr = body.replace(/(\w+:)|(\w+ :)/g, function (s) {
+    return '"' + s.substring(0, s.length - 1) + '":';
+  });
   // filter for status first
-  let parsedValues = JSON.parse(data);
+  let parsedValues = JSON.parse(jsonStr);
   console.log(typeof parsedValues);
 
   // if (status == 3) {
