@@ -59,7 +59,7 @@ app.post("/content/trigger", async (c) => {
   let data = JSON.stringify(body);
   // filter for status first
   let parsedValues = JSON.parse(data);
-  console.log({ parsedValues });
+  console.log(typeof parsedValues);
 
   // if (status == 3) {
   //   let value = await getValue(id);
