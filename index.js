@@ -55,23 +55,23 @@ app.post("/content/entry", async (c) => {
 
 app.post("/content/trigger", async (c) => {
   const body = await c.req.json();
-  const cleanedPayload = body.replace(/,\s*}/, "}");
+  // const cleanedPayload = body.replace(/,\s*}/, "}");
   console.log({ body });
-  const parsedValue = JSON.parse(cleanedPayload);
+  // const parsedValue = JSON.parse(cleanedPayload);
   // let status = 2;
   // filter for status first
-  console.log(parsedValue);
-  const { id, status } = parsedValue;
+  // console.log(parsedValue);
+  // const { id, status } = parsedValue;
 
-  if (status == 3) {
-    let value = await getValue(id);
-    console.log(value);
-    let parsedValues = JSON.stringify(value).data;
-    let res = await postToDirectus(parsedValues);
-    return c.json(res);
-    // Post to directus
-  }
-  return c.json({ id, status });
+  // if (status == 3) {
+  //   let value = await getValue(id);
+  //   console.log(value);
+  //   let parsedValues = JSON.stringify(value).data;
+  //   let res = await postToDirectus(parsedValues);
+  //   return c.json(res);
+  //   // Post to directus
+  // }
+  return c.json({ body });
 });
 serve({
   fetch: app.fetch,
