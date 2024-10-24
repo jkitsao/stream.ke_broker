@@ -56,7 +56,7 @@ app.post("/content/entry", async (c) => {
 app.post("/content/trigger", async (c) => {
   const body = await c.req.json();
   // const cleanedPayload = body.replace(/,\s*}/, "}");
-  console.log({ body });
+  console.log(body);
   // const parsedValue = JSON.parse(cleanedPayload);
   // let status = 2;
   // filter for status first
@@ -71,7 +71,7 @@ app.post("/content/trigger", async (c) => {
   //   return c.json(res);
   //   // Post to directus
   // }
-  return c.json({ body });
+  return c.json(body);
 });
 serve({
   fetch: app.fetch,
