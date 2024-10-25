@@ -60,17 +60,18 @@ function parseJSONWithCleanup(jsonString) {
 app.post("/content/trigger", async (c) => {
   const body = await c.req.json();
   const parsedObject = parseJSONWithCleanup(body);
-  console.log(typeof parsedObject);
-
-  // if (status == 3) {
-  //   let value = await getValue(id);
-  //   console.log(value);
-  //   let parsedValues = JSON.stringify(value).data;
-  //   let res = await postToDirectus(parsedValues);
-  //   return c.json(res);
-  //   // Post to directus
-  // }
-  return c.json(parsedObject.status);
+  // console.log(typeof parsedObject);
+  let { id, status } = parsedObject;
+  if (status == 3) {
+    let value = await getValue(id);
+    // console.log(typeof JSON.parse(value));
+    let parsedValues = JSON.parse(value).data;
+    // console.log({ parsedValues });
+    let res = await postToDirectus(parsedValues);
+    return c.json(res);
+    // Post to directus
+  }
+  return c.json(parsedObject);
 });
 serve({
   fetch: app.fetch,
