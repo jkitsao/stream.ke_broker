@@ -66,10 +66,12 @@ app.post("/content/trigger", async (c) => {
     let value = await getValue(id);
     // console.log(typeof JSON.parse(value));
     let parsedValues = JSON.parse(value).data;
-    // console.log({ parsedValues });
     let res = await postToDirectus(parsedValues);
+    console.log({ res });
     return c.json(res);
     // Post to directus
+  } else {
+    return c.json({ message: "OK" });
   }
   return c.json(parsedObject);
 });
