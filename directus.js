@@ -12,6 +12,7 @@ const postToDirectus = async (parsedValue) => {
     if (!response.ok) {
       throw new Error("Failed to post to Directus");
     }
+    return response;
   } catch (error) {
     console.error(`Failed to post to Directus: ${error.message}`);
   }
