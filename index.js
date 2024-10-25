@@ -64,7 +64,7 @@ app.post("/content/trigger", async (c) => {
   let { id, status } = parsedObject;
   if (status == 3) {
     let value = await getValue(id);
-    // console.log(typeof JSON.parse(value));
+    console.log(typeof value);
     let parsedValues = JSON.parse(value).data;
     let res = await postToDirectus(parsedValues);
     console.log({ res });
