@@ -52,17 +52,15 @@ app.post("/content/entry", async (c) => {
  *  Consume video events process and
  *   send to directus
  */
-
+function parseJSONWithCleanup(jsonString) {
+  // Remove trailing commas before closing braces or brackets
+  const cleanedString = jsonString.replace(/,(\s*[\}\]])/g, "$1");
+  return JSON.parse(cleanedString);
+}
 app.post("/content/trigger", async (c) => {
   const body = await c.req.json();
-  // const { id, status } = body;
-  let data = JSON.stringify(body);
-  var jsonStr = data.replace(/(\w+:)|(\w+ :)/g, function (s) {
-    return '"' + s.substring(0, s.length - 1) + '":';
-  });
-  // filter for status first
-  let parsedValues = JSON.parse(jsonStr);
-  console.log(parsedValues);
+  const parsedObject = parseJSONWithCleanup(body);
+  console.log(typeof parsedObject);
 
   // if (status == 3) {
   //   let value = await getValue(id);
@@ -72,7 +70,7 @@ app.post("/content/trigger", async (c) => {
   //   return c.json(res);
   //   // Post to directus
   // }
-  return c.json({ id, status });
+  return c.json(parsedObject.status);
 });
 serve({
   fetch: app.fetch,
