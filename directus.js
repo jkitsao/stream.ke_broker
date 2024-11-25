@@ -14,7 +14,7 @@ const postToDirectus = async (parsedValue) => {
     }
     return response;
   } catch (error) {
-    console.error(`Failed to post to Directus: ${error.message}`);
+    console.error(error);
   }
 };
 export default postToDirectus;
