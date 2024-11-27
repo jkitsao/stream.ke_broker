@@ -24,6 +24,7 @@ app.post("/content/entry", async (c) => {
       price: 5,
       video_id: guid,
       library_id: videoLibraryId,
+      required_key: "356f6c8e-cc61-4df0-b25b-1b2c41b6bc3e", //default list
     },
     timestamp: Date.now(),
   };
