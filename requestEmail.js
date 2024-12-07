@@ -26,7 +26,7 @@ const requestEmail = async (data) => {
         }`
       );
     }
-
+    console.log("Mail has been sent ");
     return await response.json(); // Return the parsed JSON response
   } catch (error) {
     console.error("An error occurred:", error);
