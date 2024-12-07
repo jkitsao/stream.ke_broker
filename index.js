@@ -53,11 +53,12 @@ app.post("/content/trigger", async (c) => {
       let value = await getValue(id);
       let parsedValues = JSON.parse(value).data;
       let res = await postToDirectus(parsedValues);
+      console.log("JOB has started");
       // Destructure required info to send notification job
       // create job
       let { title, creator: creator_id, video_id } = parsedValues;
-      await addJob({ title, creator: creator_id, video_id });
-      // console.log({ res });
+      let jobres = await addJob({ title, creator: creator_id, video_id });
+      console.log({ jobres });
       return c.json(res);
     } catch (error) {
       console.error(error);

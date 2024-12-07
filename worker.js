@@ -5,9 +5,9 @@ import requestEmail from "./requestEmail.js";
 const myWorker = new Worker(
   "notify",
   async (job) => {
-    let { creator, title, video_id } = job.data.content;
+    let { creator, title, video_id } = job?.data.content;
     let res = await getFollowersId(creator);
-    // console.log({ res });
+    console.log({ res });
     res.map(async (follow) => {
       let emailData = {
         recepient: follow.user_email,
