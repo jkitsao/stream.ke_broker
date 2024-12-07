@@ -6,6 +6,8 @@ const myWorker = new Worker(
   "notify",
   async (job) => {
     let { creator, title, video_id } = job?.data.content;
+    console.log({ job });
+
     let res = await getFollowersId(creator);
     console.log({ res });
     res.map(async (follow) => {
