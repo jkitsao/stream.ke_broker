@@ -56,7 +56,7 @@ app.post("/content/trigger", async (c) => {
       console.log("JOB has started");
       // Destructure required info to send notification job
       // create job
-      let { title, creator: creator_id, video_id } = parsedValues;
+      let { title, creator_id, video_id } = parsedValues;
       let content = { title, creator: creator_id, video_id };
       try {
         await addJob(content);
