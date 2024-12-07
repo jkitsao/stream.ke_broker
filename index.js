@@ -3,6 +3,8 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { setValue, getValue } from "./redis.js";
 import postToDirectus from "./directus.js";
+import addJob from "./add.js";
+
 // import producer from "./producer.js";
 // import run from "./consumer.js";
 const app = new Hono();
@@ -32,22 +34,6 @@ app.post("/content/entry", async (c) => {
   let res = await setValue(guid, event);
   console.log(res);
   return c.json({ message: "Hello!" });
-
-  /**
-   *   Convert and publish data as kafka formated event
-   *
-   */
-  // async function sendMessage() {
-  //   await producer.connect();
-  //   await producer.send({
-  //     topic: "video-events",
-  //     messages: [{ value: JSON.stringify(event) }],
-  //   });
-  //   await producer.disconnect();
-  // }
-
-  // sendMessage().catch(console.error);
-  // return c.json({ message: "Hello!" });
 });
 /**
  *  Consume video events process and
@@ -61,16 +47,21 @@ function parseJSONWithCleanup(jsonString) {
 app.post("/content/trigger", async (c) => {
   const body = await c.req.json();
   const parsedObject = parseJSONWithCleanup(body);
-  // console.log(typeof parsedObject);
   let { id, status } = parsedObject;
   if (status == 3) {
-    let value = await getValue(id);
-    console.log(typeof value);
-    let parsedValues = JSON.parse(value).data;
-    let res = await postToDirectus(parsedValues);
-    console.log({ res });
-    return c.json(res);
-    // Post to directus
+    try {
+      let value = await getValue(id);
+      let parsedValues = JSON.parse(value).data;
+      let res = await postToDirectus(parsedValues);
+      // Destructure required info to send notification job
+      // create job
+      let { title, creator: creator_id, video_id } = parsedValues;
+      await addJob({ title, creator: creator_id, video_id });
+      // console.log({ res });
+      return c.json(res);
+    } catch (error) {
+      console.error(error);
+    }
   } else {
     return c.json({ message: "OK" });
   }

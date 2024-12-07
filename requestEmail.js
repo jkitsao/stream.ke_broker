@@ -1,27 +1,27 @@
-const DIRECTUS_API_URL = "https://api.streamke.site/items/content";
+const EMAIL_API_URL = "https://stream.ke/api/emails/notify";
 
-const postToDirectus = async (parsedValue) => {
+const requestEmail = async (data) => {
   // console.log(JSON.stringify({ parsedValue }));
   try {
     // Post the data to Directus API
-    const response = await fetch(DIRECTUS_API_URL, {
+    const response = await fetch(EMAIL_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(parsedValue),
+      body: JSON.stringify(data),
     });
 
     if (!response.ok) {
       // Log detailed response error
       const errorData = await response.json(); // Parse the response body for error details
-      console.error("Failed to post to Directus:", {
+      console.error("Failed to send mail", {
         status: response.status,
         statusText: response.statusText,
         errorData,
       });
       throw new Error(
-        `Failed to post to Directus: ${
+        `Failed to send Email: ${
           errorData?.errors?.[0]?.message || "Unknown error"
         }`
       );
@@ -34,4 +34,4 @@ const postToDirectus = async (parsedValue) => {
   }
 };
 
-export default postToDirectus;
+export default requestEmail;
