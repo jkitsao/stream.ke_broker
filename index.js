@@ -57,9 +57,14 @@ app.post("/content/trigger", async (c) => {
       // Destructure required info to send notification job
       // create job
       let { title, creator: creator_id, video_id } = parsedValues;
-      let jobres = await addJob({ title, creator: creator_id, video_id });
-      console.log({ jobres });
-      return c.json(res);
+      let content = { title, creator: creator_id, video_id };
+      try {
+        await addJob(content);
+        // console.log({ jobres });
+        return c.json(res);
+      } catch (error) {
+        console.error("error posting Job", error);
+      }
     } catch (error) {
       console.error(error);
     }

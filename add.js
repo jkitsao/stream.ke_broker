@@ -10,10 +10,17 @@ const myQueue = new Queue("notify", {
 
 // function to add job
 async function addJob(content) {
-  await myQueue.add("cars", {
-    content: content,
-    //   delay: 30000,
-  });
+  try {
+    let res = await myQueue.add("cars", {
+      content: content,
+      //   delay: 30000,
+    });
+    console.log("Job added");
+    return res;
+  } catch (error) {
+    console.log("Job not added");
+    return error;
+  }
 }
 
 // let cont = {
