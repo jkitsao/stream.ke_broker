@@ -1,6 +1,7 @@
 const EMAIL_API_URL = "https://stream.ke/api/emails/notify";
 
 const requestEmail = async (data) => {
+  console.log("Email request initiated");
   // console.log(JSON.stringify({ parsedValue }));
   try {
     // Post the data to Directus API

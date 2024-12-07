@@ -1,5 +1,6 @@
 // when given creator id find all
 const getFollowersId = async (creator) => {
+  console.log(`fetching folllowers for ${creator}`);
   const DIRECTUS_API_URL = `https://api.streamke.site/items/follows?filter[creator][_eq]=${creator}`;
   // console.log(JSON.stringify({ parsedValue }));
   try {
@@ -20,7 +21,7 @@ const getFollowersId = async (creator) => {
       );
     }
     let data = await response.json();
-    console.log(JSON.stringify(data.data, null, 2));
+    console.log(JSON.stringify(data, null, 2));
     // Possibly notify creator
     return data.data; // Return the parsed JSON response
   } catch (error) {
