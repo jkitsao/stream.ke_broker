@@ -13,7 +13,7 @@ app.get("/", (c) => c.text("Hello Node.js!"));
 // get post body from stream.ke
 app.post("/content/entry", async (c) => {
   const body = await c.req.json();
-  const { description, title, tier, creator_id, status, price } = body;
+  const { description, title, tier, creator_id, status, price, creator } = body;
   const { guid, videoLibraryId } = body.data;
   const event = {
     type: "VideoPublished",
@@ -22,6 +22,7 @@ app.post("/content/entry", async (c) => {
       title,
       pricing: tier,
       creator_id,
+      creator,
       status,
       price: 5,
       video_id: guid,
@@ -56,8 +57,8 @@ app.post("/content/trigger", async (c) => {
       console.log("JOB has started");
       // Destructure required info to send notification job
       // create job
-      let { title, creator_id, video_id } = parsedValues;
-      let content = { title, creator: creator_id, video_id };
+      let { title, creator, video_id } = parsedValues;
+      let content = { title, creator, video_id };
       try {
         await addJob(content);
         // console.log({ jobres });
