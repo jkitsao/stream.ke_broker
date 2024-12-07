@@ -5,21 +5,22 @@ import requestEmail from "./requestEmail.js";
 const myWorker = new Worker(
   "notify",
   async (job) => {
-    let { creator, title, video_id } = job?.data.content;
-    console.log({ job });
-
-    let res = await getFollowersId(creator);
-    console.log({ res });
-    res.map(async (follow) => {
-      let emailData = {
-        recepient: follow.user_email,
-        creator: follow.creator_name,
-        name: follow.user_name,
-        video_name: title,
-        video_id: video_id,
-      };
-      await requestEmail(emailData);
-    });
+    if (job.name === "cars") {
+      let { creator, title, video_id } = job.data.content;
+      console.log(JSON.stringify(job.data));
+      let res = await getFollowersId(creator);
+      console.log({ res });
+      res.map(async (follow) => {
+        let emailData = {
+          recepient: follow.user_email,
+          creator: follow.creator_name,
+          name: follow.user_name,
+          video_name: title,
+          video_id: video_id,
+        };
+        await requestEmail(emailData);
+      });
+    }
   },
   {
     connection: {
