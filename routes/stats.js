@@ -7,7 +7,7 @@ videos.get("/stats/:id", async (c) => {
   // GET /videos/:id
   const id = c.req.param("id");
   const data = await fetchData(id);
-  console.log(data);
+  // console.log(data);
   return c.json(data);
 });
 
@@ -27,7 +27,7 @@ const fetchData = async (id) => {
     const response = await axios.request(config);
     return response.data;
   } catch (error) {
-    console.error(error);
-    return error;
+    // console.error(error);
+    return error.message;
   }
 };
