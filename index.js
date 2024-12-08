@@ -6,13 +6,16 @@ import postToDirectus from "./directus.js";
 import addJob from "./add.js";
 import videos from "./routes/stats.js";
 import { logger } from "hono/logger";
+import { serveStatic } from "@hono/node-server/serve-static";
 // import producer from "./producer.js";
 // import run from "./consumer.js";
 const app = new Hono();
 app.use("*", logger());
 app.use("/content/*", cors());
+app.use("/static/*", cors());
 app.use("/videos/*", cors());
 app.route("/videos", videos);
+app.use("/static/*", serveStatic({ root: "./" }));
 app.get("/", (c) => c.text("Hello Node.js!"));
 // get post body from stream.ke
 app.post("/content/entry", async (c) => {
