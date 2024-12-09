@@ -6,8 +6,10 @@ import getContent from "./content.js";
 const myWorker = new Worker(
   "image-process-production",
   async (job) => {
-    console.log(`Processing job ${job.id} with data: ${job.data.jobData}`);
-    await getContent();
+    if (job.name) {
+      console.log(`Processing job ${job.id} with data: ${job.data.jobData}`);
+      await getContent();
+    }
   },
   {
     connection: {
