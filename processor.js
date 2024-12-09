@@ -6,7 +6,7 @@ import getContent from "./content.js";
 const myWorker = new Worker(
   "image-process-production",
   async (job) => {
-    if (job.name) {
+    if (job.name == "image-processor-production") {
       console.log(`Processing job ${job.id} with data: ${job.data.jobData}`);
       await getContent();
     }

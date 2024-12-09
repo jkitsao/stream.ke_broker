@@ -27,7 +27,7 @@ const getContent = async () => {
     }
     let data = await response.json();
     let images = getRandomThumbnails(data.data);
-    // console.log(JSON.stringify(images, null, 2));
+    console.log({ images });
     try {
       const collage = await createCollage(images);
       // Get the directory name of the current module
@@ -87,8 +87,15 @@ async function createCollage(data) {
     // Fetch and resize images
     const resizedImages = await Promise.all(
       imageUrls.map(async (url) => {
-        const response = await axios.get(url, { responseType: "arraybuffer" });
-        return sharp(response.data).resize(320, 180).toBuffer(); // Resize to 200x200
+        // Resize to 200x200
+        try {
+          const response = await axios.get(url, {
+            responseType: "arraybuffer",
+          });
+          return sharp(response.data).resize(320, 180).toBuffer();
+        } catch (error) {
+          console.error("failed to fetch and resize", error);
+        }
       })
     );
 

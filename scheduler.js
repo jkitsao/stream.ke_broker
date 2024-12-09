@@ -14,7 +14,7 @@ async function scheduleJob() {
     let res = await myQueue.upsertJobScheduler(
       "processor-production",
       {
-        every: 50000, // Job will repeat every 10000 milliseconds (10 seconds)
+        every: 60000, // Job will repeat every 60000 milliseconds (50 seconds)
       },
       {
         name: "image-processor-production",
@@ -22,6 +22,7 @@ async function scheduleJob() {
         opts: {}, // Optional additional job options
       }
     );
+    await getJobs();
   } catch (error) {
     console.log("Job not added");
     return error;
