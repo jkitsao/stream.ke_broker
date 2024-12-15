@@ -4,9 +4,9 @@ import requestEmail from "./requestEmail.js";
 import getContent from "./content.js";
 // getFollowersId("4f5df828-f1b7-48ee-8ea0-811c7b975ef8");
 const myWorker = new Worker(
-  "image-process-production",
+  "image-process-production-001",
   async (job) => {
-    if (job.name == "image-processor-production") {
+    if (job.name == "collage") {
       console.log(`Processing job ${job.id} with data: ${job.data.jobData}`);
       await getContent();
     }
