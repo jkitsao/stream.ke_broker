@@ -29,7 +29,7 @@ const getContent = async () => {
     let images = getRandomThumbnails(data.data);
     console.log({ images });
     try {
-      const collage = await createCollage(images);
+      const collage = await createStylizedCollage(images);
       // Get the directory name of the current module
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = dirname(__filename);
@@ -59,21 +59,26 @@ function getRandomThumbnails(data) {
 
   // Filter out items where creator_thumbnail is null
   const validThumbnails = data
-    .map((item) => item.creator_thumbnail)
-    .filter((thumbnail) => thumbnail !== null);
+    .map((item) => item.creator_thumbnail) // deb83ab9-b640-484c-adb4-d276f31ad1ad
+    .filter((thumbnail) => thumbnail !== null)
+    .filter(
+      (thumbnail) => thumbnail !== "deb83ab9-b640-484c-adb4-d276f31ad1ad"
+    );
+
+  console.log({ validThumbnails });
 
   // Shuffle and pick four random thumbnails
   const randomThumbnails = validThumbnails
+    // .filter((thumbnail) => thumbnail.status !== "draft")
     .sort(() => Math.random() - 0.5) // Shuffle array
     .slice(0, 4); // Take the first 4
-
   // Concatenate with base URL
   const result = randomThumbnails.map((thumbnail) => baseUrl + thumbnail);
-
+  console.log({ result });
   return result;
 }
 
-async function createCollage(data) {
+async function createStylizedCollage(data) {
   const baseUrl = "https://api.streamke.site/assets/";
 
   try {
@@ -87,32 +92,49 @@ async function createCollage(data) {
     // Fetch and resize images
     const resizedImages = await Promise.all(
       imageUrls.map(async (url) => {
-        // Resize to 200x200
         try {
           const response = await axios.get(url, {
             responseType: "arraybuffer",
           });
-          return sharp(response.data).resize(320, 180).toBuffer();
+          return sharp(response.data)
+            .resize(300, 200) // Resize to a smaller dimension
+            .toBuffer();
         } catch (error) {
-          console.error("failed to fetch and resize", error);
+          console.error("Failed to fetch and resize", error);
         }
       })
     );
 
-    // Create the collage
-    const collage = await sharp({
-      create: {
-        width: 640,
-        height: 360,
-        channels: 3,
-        background: { r: 255, g: 255, b: 255 }, // White background
-      },
-    })
+    // Blurred background
+    const background = await sharp(resizedImages[0])
+      .resize(640, 360)
+      .blur(15)
+      .toBuffer();
+
+    // Create the collage with overlay
+    const collage = await sharp(background)
       .composite([
-        { input: resizedImages[0], top: 0, left: 0 },
-        { input: resizedImages[1], top: 0, left: 320 },
-        { input: resizedImages[2], top: 180, left: 0 },
-        { input: resizedImages[3], top: 180, left: 320 },
+        // Image 1 - Top left with rotation
+        { input: resizedImages[0], top: 30, left: 30, blend: "over" },
+        // Image 2 - Top right
+        { input: resizedImages[1], top: 30, left: 330, blend: "over" },
+        // Image 3 - Bottom left with border
+        {
+          input: await sharp(resizedImages[2])
+            .extend({
+              top: 10,
+              bottom: 10,
+              left: 10,
+              right: 10,
+              background: "orange",
+            })
+            .toBuffer(),
+          top: 180,
+          left: 30,
+          blend: "over",
+        },
+        // Image 4 - Bottom right
+        { input: resizedImages[3], top: 180, left: 330, blend: "over" },
       ])
       .jpeg()
       .toBuffer();
